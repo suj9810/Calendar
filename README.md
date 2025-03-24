@@ -6,4 +6,5 @@
 |일정 목록 조회| <code>GET</code>| /api/calendae|요청 param|다건 응답 정보|200: 정상 조회|
 |일정 수정| <code>PUT</code>|/api/calendae/{id}|요청 body| 수정 정보|200: 정상 수정|
 |일정 삭제| <code>PUT</code>|/api/calendae/{id}|요청 body| 수정 정보|200: 정상 삭제|
+
 ![img.png](img.png)
