@@ -18,4 +18,7 @@ public interface CalendarService {
 
     // 일정 수정
     CalendarResponseDto updateSchedules(Long id, String todoist, String writer, String password);
+
+    // 일정 삭제
+    void deleteSchedules(Long id, String password);
 }

@@ -48,4 +48,15 @@ public class CalendarController {
 
         return new ResponseEntity<>(calendarService.updateSchedules(id, dto.getTodoist(), dto.getWriter(), dto.getPassword()), HttpStatus.OK);
     }
+
+    // 일정 삭제
+    @DeleteMapping("/schedule/{id}")
+    public ResponseEntity<Void> deleteSchedules(
+            @PathVariable Long id,
+            @RequestBody CalendarRequestDto dto
+    ) {
+        calendarService.deleteSchedules(id, dto.getPassword());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -79,6 +79,12 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
         return jdbcTemplate.update("update calendar set todoist = ?, writer = ? where id = ?", todoist, writer, id);
     }
 
+    // 일정 삭제
+    @Override
+    public int deleteSchedules(Long id) {
+        return jdbcTemplate.update("delete from calendar where id = ?", id);
+    }
+
     private RowMapper<CalendarResponseDto> calendarRowMapper() {
         return new RowMapper<CalendarResponseDto>() {
             @Override

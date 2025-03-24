@@ -22,4 +22,7 @@ public interface CalendarRepository {
 
     // 일정 수정
     int updateSchedules(Long id, String todoist, String writer);
+
+    // 일정 삭제
+    int deleteSchedules(Long id);
 }

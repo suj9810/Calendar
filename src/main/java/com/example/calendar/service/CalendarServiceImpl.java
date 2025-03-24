@@ -71,4 +71,23 @@ public class CalendarServiceImpl implements CalendarService {
 
         return new CalendarResponseDto(updateCalendar);
     }
+
+    // 일정 삭제
+    @Override
+    public void deleteSchedules(Long id, String password) {
+
+        Calendar calendar = calendarRepository.findScheduleByIdOrElseThrow(id);
+
+        // 비밀번호 검증
+        if (!calendar.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid password");
+        }
+
+        int updateRow = calendarRepository.deleteSchedules(id);
+
+        if (updateRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
+
+    }
 }
