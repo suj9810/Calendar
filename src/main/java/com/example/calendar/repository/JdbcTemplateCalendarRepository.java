@@ -47,6 +47,12 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
         return new CalendarResponseDto(key.longValue(), dto.getTitle(), dto.getTodoist(), dto.getCreatedAt(), dto.getUpdatedAt(), dto.getWriter());
     }
 
+    // 일정 목록 조회
+    @Override
+    public List<CalendarResponseDto> findAllSchedules() {
+        return jdbcTemplate.query("select * from calendar", calendarRowMapper());
+    }
+
     private RowMapper<CalendarResponseDto> calendarRowMapper() {
         return new RowMapper<CalendarResponseDto>() {
             @Override
@@ -58,6 +64,23 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
                         rs.getDate("createdAt"),
                         rs.getDate("updatedAt"),
                         rs.getString("writer")
+                );
+            }
+        };
+    }
+
+    private RowMapper<Calendar> calendarRowMapperV2(){
+        return new RowMapper<Calendar>() {
+            @Override
+            public Calendar mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Calendar(
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        rs.getString("todoist"),
+                        rs.getDate("createdAt"),
+                        rs.getDate("updatedAt"),
+                        rs.getString("writer"),
+                        rs.getString("password")
                 );
             }
         };
