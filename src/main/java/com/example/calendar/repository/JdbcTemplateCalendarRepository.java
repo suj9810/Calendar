@@ -3,11 +3,13 @@ package com.example.calendar.repository;
 import com.example.calendar.dto.CalendarResponseDto;
 import com.example.calendar.entity.Calendar;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -52,6 +54,25 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
     public List<CalendarResponseDto> findAllSchedules() {
         return jdbcTemplate.query("select * from calendar", calendarRowMapper());
     }
+
+    // 일정 단건 조회
+    @Override
+    public Optional<Calendar> findScheduleById(Long id) {
+
+        List<Calendar> result = jdbcTemplate.query("select * from calendar where id = ?", calendarRowMapperV2(), id);
+
+        return result.stream().findAny();
+    }
+
+    // id 검증
+    @Override
+    public Calendar findScheduleByIdOrElseThrow(Long id) {
+
+        List<Calendar> result = jdbcTemplate.query("select * from calendar where id = ?", calendarRowMapperV2(), id);
+
+        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
+    }
+
 
     private RowMapper<CalendarResponseDto> calendarRowMapper() {
         return new RowMapper<CalendarResponseDto>() {

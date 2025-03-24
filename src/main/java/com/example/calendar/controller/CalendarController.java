@@ -32,4 +32,10 @@ public class CalendarController {
 
         return new ResponseEntity<>(calendarService.findAllSchedules(), HttpStatus.OK);
     }
+
+    // 일정 단건 조회
+    @GetMapping("/schedule/{id}")
+    public ResponseEntity<CalendarResponseDto> findScheduleById(@PathVariable Long id) {
+        return new ResponseEntity<>(calendarService.findScheduleById(id), HttpStatus.OK);
+    }
 }

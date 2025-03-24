@@ -4,6 +4,7 @@ import com.example.calendar.dto.CalendarResponseDto;
 import com.example.calendar.entity.Calendar;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CalendarRepository {
 
@@ -12,4 +13,10 @@ public interface CalendarRepository {
 
     // 일정 목록 조회
     List<CalendarResponseDto> findAllSchedules();
+
+    // 일정 단건 조회
+    Optional<Calendar> findScheduleById(Long id);
+
+    // id 검증
+    Calendar findScheduleByIdOrElseThrow(Long id);
 }

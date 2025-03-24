@@ -12,4 +12,7 @@ public interface CalendarService {
 
     // 일정 목록 조회
     List<CalendarResponseDto> findAllSchedules();
+
+    // 일정 단건 조회
+    CalendarResponseDto findScheduleById(Long id);
 }
