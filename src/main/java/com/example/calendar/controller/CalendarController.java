@@ -38,4 +38,14 @@ public class CalendarController {
     public ResponseEntity<CalendarResponseDto> findScheduleById(@PathVariable Long id) {
         return new ResponseEntity<>(calendarService.findScheduleById(id), HttpStatus.OK);
     }
+
+    // 일정 수정
+    @PutMapping("/schedule/{id}")
+    public ResponseEntity<CalendarResponseDto> updateSchedules(
+            @PathVariable Long id,
+            @RequestBody CalendarRequestDto dto
+    ) {
+
+        return new ResponseEntity<>(calendarService.updateSchedules(id, dto.getTodoist(), dto.getWriter(), dto.getPassword()), HttpStatus.OK);
+    }
 }

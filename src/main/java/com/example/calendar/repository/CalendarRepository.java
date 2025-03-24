@@ -19,4 +19,7 @@ public interface CalendarRepository {
 
     // id 검증
     Calendar findScheduleByIdOrElseThrow(Long id);
+
+    // 일정 수정
+    int updateSchedules(Long id, String todoist, String writer);
 }

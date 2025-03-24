@@ -73,6 +73,11 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
     }
 
+    // 일정 수정
+    @Override
+    public int updateSchedules(Long id, String todoist, String writer) {
+        return jdbcTemplate.update("update calendar set todoist = ?, writer = ? where id = ?", todoist, writer, id);
+    }
 
     private RowMapper<CalendarResponseDto> calendarRowMapper() {
         return new RowMapper<CalendarResponseDto>() {

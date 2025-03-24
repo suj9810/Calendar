@@ -15,4 +15,7 @@ public interface CalendarService {
 
     // 일정 단건 조회
     CalendarResponseDto findScheduleById(Long id);
+
+    // 일정 수정
+    CalendarResponseDto updateSchedules(Long id, String todoist, String writer, String password);
 }

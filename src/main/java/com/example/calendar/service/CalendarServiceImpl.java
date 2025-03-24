@@ -4,7 +4,10 @@ import com.example.calendar.dto.CalendarRequestDto;
 import com.example.calendar.dto.CalendarResponseDto;
 import com.example.calendar.entity.Calendar;
 import com.example.calendar.repository.CalendarRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -40,5 +43,32 @@ public class CalendarServiceImpl implements CalendarService {
         Calendar calendar = calendarRepository.findScheduleByIdOrElseThrow(id);
 
         return new CalendarResponseDto(calendar);
+    }
+
+    // 일정 수정
+    @Transactional
+    @Override
+    public CalendarResponseDto updateSchedules(Long id, String todoist, String writer, String password) {
+
+        Calendar calendar = calendarRepository.findScheduleByIdOrElseThrow(id);
+
+        // 비밀번호 검증
+        if (!calendar.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid password");
+        }
+
+        if (todoist == null || writer == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and contents are required values.");
+        }
+
+        int updateRow = calendarRepository.updateSchedules(id, todoist, writer);
+
+        if (updateRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
+
+        Calendar updateCalendar = calendarRepository.findScheduleByIdOrElseThrow(id);
+
+        return new CalendarResponseDto(updateCalendar);
     }
 }
