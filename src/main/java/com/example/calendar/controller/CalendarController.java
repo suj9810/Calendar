@@ -20,26 +20,26 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
-    // 일정 생성
+    // 1️⃣ 일정 생성
     @PostMapping("/schedule")
     public ResponseEntity<CalendarResponseDto> createSchedule(@RequestBody CalendarRequestDto dto) {
         return new ResponseEntity<>(calendarService.saveSchedule(dto), HttpStatus.CREATED);
     }
 
-    // 일정 목록 조회
+    // 2️⃣ 일정 목록 조회
     @GetMapping("/schedule")
     public ResponseEntity<List<CalendarResponseDto>> findAllSchedules() {
 
         return new ResponseEntity<>(calendarService.findAllSchedules(), HttpStatus.OK);
     }
 
-    // 일정 단건 조회
+    // 3️⃣ 일정 단건 조회
     @GetMapping("/schedule/{id}")
     public ResponseEntity<CalendarResponseDto> findScheduleById(@PathVariable Long id) {
         return new ResponseEntity<>(calendarService.findScheduleById(id), HttpStatus.OK);
     }
 
-    // 일정 수정
+    // 4️⃣ 일정 수정
     @PutMapping("/schedule/{id}")
     public ResponseEntity<CalendarResponseDto> updateSchedules(
             @PathVariable Long id,
@@ -49,7 +49,7 @@ public class CalendarController {
         return new ResponseEntity<>(calendarService.updateSchedules(id, dto.getTodoist(), dto.getWriter(), dto.getPassword()), HttpStatus.OK);
     }
 
-    // 일정 삭제
+    // 5️⃣ 일정 삭제
     @DeleteMapping("/schedule/{id}")
     public ResponseEntity<Void> deleteSchedules(
             @PathVariable Long id,

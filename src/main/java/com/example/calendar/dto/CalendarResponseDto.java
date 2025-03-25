@@ -4,6 +4,7 @@ import com.example.calendar.entity.Calendar;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -13,8 +14,8 @@ public class CalendarResponseDto {
     private Long id;
     private String title;
     private String todoist;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private String writer;
 
     public CalendarResponseDto(Calendar calendar) {

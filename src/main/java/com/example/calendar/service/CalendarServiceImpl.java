@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class CalendarServiceImpl implements CalendarService {
         this.calendarRepository = calendarRepository;
     }
 
-    // 일정 등록
+    // 1️⃣ 일정 등록
     @Override
     public CalendarResponseDto saveSchedule(CalendarRequestDto dto) {
 
@@ -29,14 +30,14 @@ public class CalendarServiceImpl implements CalendarService {
         return calendarRepository.saveSchedule(calendar);
     }
 
-    // 일정 목록 조회
+    // 2️⃣ 일정 목록 조회
     @Override
     public List<CalendarResponseDto> findAllSchedules() {
 
         return calendarRepository.findAllSchedules();
     }
 
-    // 일정 단건 조회
+    // 3️⃣ 일정 단건 조회
     @Override
     public CalendarResponseDto findScheduleById(Long id) {
 
@@ -45,20 +46,20 @@ public class CalendarServiceImpl implements CalendarService {
         return new CalendarResponseDto(calendar);
     }
 
-    // 일정 수정
+    // 4️⃣ 일정 수정
     @Transactional
     @Override
     public CalendarResponseDto updateSchedules(Long id, String todoist, String writer, String password) {
 
         Calendar calendar = calendarRepository.findScheduleByIdOrElseThrow(id);
 
-        // 비밀번호 검증
+        // ✅ 비밀번호 검증
         if (!calendar.getPassword().equals(password)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid password");
         }
 
         if (todoist == null || writer == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and contents are required values.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and writer are required values.");
         }
 
         int updateRow = calendarRepository.updateSchedules(id, todoist, writer);
@@ -72,13 +73,13 @@ public class CalendarServiceImpl implements CalendarService {
         return new CalendarResponseDto(updateCalendar);
     }
 
-    // 일정 삭제
+    // 5️⃣ 일정 삭제
     @Override
     public void deleteSchedules(Long id, String password) {
 
         Calendar calendar = calendarRepository.findScheduleByIdOrElseThrow(id);
 
-        // 비밀번호 검증
+        // ✅ 비밀번호 검증
         if (!calendar.getPassword().equals(password)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid password");
         }

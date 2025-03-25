@@ -24,8 +24,8 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
     public JdbcTemplateCalendarRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    
-    // 일정 등록
+
+    // 1️⃣ 일정 등록
     @Override
     public CalendarResponseDto saveSchedule(Calendar calendar) {
 
@@ -42,49 +42,50 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
 
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        List<CalendarResponseDto> result = jdbcTemplate.query("select id, title, todoist, createdAt, updatedAt, writer from calendar where id = ?", calendarRowMapper(), key.longValue());
+        List<CalendarResponseDto> result = jdbcTemplate.query("SELECT id, title, todoist, createdAt, updatedAt, writer FROM calendar WHERE id = ?", calendarRowMapper(), key.longValue());
 
         CalendarResponseDto dto = result.get(0);
 
         return new CalendarResponseDto(key.longValue(), dto.getTitle(), dto.getTodoist(), dto.getCreatedAt(), dto.getUpdatedAt(), dto.getWriter());
     }
 
-    // 일정 목록 조회
+    // 2️⃣ 일정 목록 조회
     @Override
     public List<CalendarResponseDto> findAllSchedules() {
-        return jdbcTemplate.query("select * from calendar", calendarRowMapper());
+        return jdbcTemplate.query("SELECT id, title, todoist, createdAt, updatedAt, writer FROM calendar", calendarRowMapper());
     }
 
-    // 일정 단건 조회
+    // 3️⃣ 일정 단건 조회
     @Override
     public Optional<Calendar> findScheduleById(Long id) {
 
-        List<Calendar> result = jdbcTemplate.query("select * from calendar where id = ?", calendarRowMapperV2(), id);
+        List<Calendar> result = jdbcTemplate.query("SELECT * FROM calendar WHERE id = ?", calendarRowMapperV2(), id);
 
         return result.stream().findAny();
     }
 
-    // id 검증
+    // 4️⃣ 일정 수정
+    @Override
+    public int updateSchedules(Long id, String todoist, String writer) {
+        return jdbcTemplate.update("UPDATE calendar SET todoist = ?, writer = ?, updatedAt = NOW() WHERE id = ?", todoist, writer, id);
+    }
+
+    // 5️⃣ 일정 삭제
+    @Override
+    public int deleteSchedules(Long id) {
+        return jdbcTemplate.update("DELETE FROM calendar WHERE id = ?", id);
+    }
+
+    // ✅ id 검증
     @Override
     public Calendar findScheduleByIdOrElseThrow(Long id) {
 
-        List<Calendar> result = jdbcTemplate.query("select * from calendar where id = ?", calendarRowMapperV2(), id);
+        List<Calendar> result = jdbcTemplate.query("SELECT * FROM calendar WHERE id = ?", calendarRowMapperV2(), id);
 
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
     }
 
-    // 일정 수정
-    @Override
-    public int updateSchedules(Long id, String todoist, String writer) {
-        return jdbcTemplate.update("update calendar set todoist = ?, writer = ? where id = ?", todoist, writer, id);
-    }
-
-    // 일정 삭제
-    @Override
-    public int deleteSchedules(Long id) {
-        return jdbcTemplate.update("delete from calendar where id = ?", id);
-    }
-
+    // ⭕ RowMapperV1 / Password Select ❌
     private RowMapper<CalendarResponseDto> calendarRowMapper() {
         return new RowMapper<CalendarResponseDto>() {
             @Override
@@ -93,14 +94,15 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
                         rs.getLong("id"),
                         rs.getString("title"),
                         rs.getString("todoist"),
-                        rs.getDate("createdAt"),
-                        rs.getDate("updatedAt"),
+                        rs.getTimestamp("createdAt").toLocalDateTime(),
+                        rs.getTimestamp("updatedAt").toLocalDateTime(),
                         rs.getString("writer")
                 );
             }
         };
     }
 
+    // ⭕ RowMapperV2 / Password Select ⭕
     private RowMapper<Calendar> calendarRowMapperV2(){
         return new RowMapper<Calendar>() {
             @Override
@@ -109,8 +111,8 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
                         rs.getLong("id"),
                         rs.getString("title"),
                         rs.getString("todoist"),
-                        rs.getDate("createdAt"),
-                        rs.getDate("updatedAt"),
+                        rs.getTimestamp("createdAt").toLocalDateTime(),
+                        rs.getTimestamp("updatedAt").toLocalDateTime(),
                         rs.getString("writer"),
                         rs.getString("password")
                 );
