@@ -1,10 +1,62 @@
-| 캘린더 API 설계하기 |                |                 |       |     |        |
-|-----|----------------|-----------------|-------|-----|--------|
-|**기능**|**Method**|**URL**|**request**|**response**|**상태코드**|
-|일정 등록|<code>POST</code>|/api/calendae|요청 body{}| 등록정보|201: 정상 등록|
-|일정 조회|<code>GET</code>|/api/calendae/{id}|요청 param| --- |200: 정상 조회|
-|일정 목록 조회| <code>GET</code>| /api/calendae|요청 param|다건 응답 정보|200: 정상 조회|
-|일정 수정| <code>PUT</code>|/api/calendae/{id}|요청 body| 수정 정보|200: 정상 수정|
-|일정 삭제| <code>PUT</code>|/api/calendae/{id}|요청 body| 수정 정보|200: 정상 삭제|
+## Calendar Project
+<hr>
+캘린더 프로젝트
 
-![img.png](img.png)
+# 💻 프로젝트 소개
+
+---
+
+일정 등록을 구현한 프로젝트입니다.
+
+# 🕰️ 개발 기간
+
+---
+- 25.03.19 수 - 25.03.26 수
+
+# 📌 프로젝트 목적
+
+<li>Spring 기초를 잡을 수 있는 프로젝트입니다.</li>
+
+
+<br>
+
+# 📖 개발 단계
+
+---
+
+### ✅ Lv.0 API 명세 및 ERD 작성
+
+- 캘린더 API 설계하기
+
+| **기능**   |**Method**|**URL**| **request(JSON)**                                                                           | **response(JSON)**                                                                                                                                          |**상태코드**|
+|----------|----------------|-----------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|
+| 일정 등록    |<code>POST</code>|/api/calendae| ``` json { "title": "팀 회의", "todoist": "데일리 스크럼", "writer": "신은주", "password": "1234" } ``` | ``` json { "id": 1, "title": "팀 회의", "todoist": "데일리 스크럼", "createdAt": "2025-03-25T09:09:49", "updatedAt": "2025-03-25T20:09:49", "writer": "신은주" } ```    |201: 정상 등록|
+| 일정 목록 조회 |<code>GET</code>|/api/calendae| -                                                                                           | ``` json [{ "id": 1, "title": "팀 회의", "todoist": "데일리 스크럼", "updatedAt": "2025-03-25T20:09:49", "writer": "신은주"}] ```                                       |200: 정상 조회|
+| 일정 조회 | <code>GET</code>| /api/calendae/{id}| -                                                                                           | ``` json { "id": 1, "title": "팀 회의", "todoist": "데일리 스크럼", "updatedAt": "2025-03-25T20:09:49", "writer": "신은주"} ```                                         |200: 정상 조회|
+| 일정 수정    | <code>PUT</code>|/api/calendae/{id}| ``` json { "todoist": "데일리 스크럼 보류", "writer": "신은주", "password": "1234" } ```               | ``` json { "id": 1, "title": "팀 회의", "todoist": "데일리 스크럼 보류", "createdAt": "2025-03-25T09:09:49", "updatedAt": "2025-03-25T20:09:49", "writer": "신은주" } ``` |200: 정상 수정|
+| 일정 삭제    | <code>PUT</code>|/api/calendae/{id}| ``` json { "password": "1234" } ```                                                          | -                                                                                                                                                           |200: 정상 삭제|
+
+![img.png](img/img.png)
+
+- SQL 작성하기
+
+[[schedule.sql](schedule.sql)]
+
+### ✅ Lv.1 API 명세 및 ERD 작성
+
+- 일정 생성(일정 작성하기)
+- 전체 일정 조회(등록된 일정 불러오기)
+- 선택 일정 조회(선택한 일정 정보 불러오기)
+
+### ✅ Lv.2 일정 수정 및 삭제
+
+- 선택한 일정 수정
+- 선택한 일정 삭제
+
+---
+
+## 🎬 실행 화면
+
+|일정 등록|일정 목록 조회|일정 조회|일정 수정|일정 삭제|
+|---|---|---|---|---|
+|![img.png](img/img1.png)| ![img.png](img/img2.png) | ![img.png](img/img3.png) | ![img.png](img/img4.png) | ![img.png](img/img5.png) |
