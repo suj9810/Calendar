@@ -1,9 +1,11 @@
 package com.example.calendar.dto;
 
 import com.example.calendar.entity.Calendar;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -25,5 +27,15 @@ public class CalendarResponseDto {
         this.createdAt = calendar.getCreatedAt();
         this.updatedAt = calendar.getUpdatedAt();
         this.writer = calendar.getWriter();
+    }
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }
