@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CalendarServiceImpl implements CalendarService {
@@ -32,9 +34,9 @@ public class CalendarServiceImpl implements CalendarService {
 
     // 2️⃣ 일정 목록 조회
     @Override
-    public List<CalendarResponseDto> findAllSchedules() {
+    public List<CalendarResponseDto> findAllSchedules(String writer, LocalDate updatedAt) {
 
-        return calendarRepository.findAllSchedules();
+        return calendarRepository.findAllSchedules(writer, updatedAt);
     }
 
     // 3️⃣ 일정 단건 조회

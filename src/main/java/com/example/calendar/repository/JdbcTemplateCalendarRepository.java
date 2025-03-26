@@ -14,11 +14,13 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
 public class JdbcTemplateCalendarRepository implements CalendarRepository {
-    
+
     private final JdbcTemplate jdbcTemplate;
 
     public JdbcTemplateCalendarRepository(DataSource dataSource) {
@@ -51,9 +53,25 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
 
     // 2️⃣ 일정 목록 조회
     @Override
-    public List<CalendarResponseDto> findAllSchedules() {
-        return jdbcTemplate.query("SELECT id, title, todoist, createdAt, updatedAt, writer FROM calendar", calendarRowMapper());
+    public List<CalendarResponseDto> findAllSchedules(String writer, LocalDate updatedAt) {
+        StringBuilder sql = new StringBuilder("SELECT id, title, todoist, createdAt, updatedAt, writer FROM calendar WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        if (writer != null && !writer.isEmpty()) {
+            sql.append(" AND writer = ?");
+            params.add(writer);
+        }
+
+        if (updatedAt != null) {
+            sql.append(" AND DATE(updatedAt) = ?");
+            params.add(updatedAt);
+        }
+
+        sql.append(" ORDER BY updatedAt DESC");
+
+        return jdbcTemplate.query(sql.toString(), params.toArray(), calendarRowMapper());
     }
+
 
     // 3️⃣ 일정 단건 조회
     @Override
@@ -63,6 +81,7 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
 
         return result.stream().findAny();
     }
+
 
     // 4️⃣ 일정 수정
     @Override
@@ -103,7 +122,7 @@ public class JdbcTemplateCalendarRepository implements CalendarRepository {
     }
 
     // ⭕ RowMapperV2 / Password Select ⭕
-    private RowMapper<Calendar> calendarRowMapperV2(){
+    private RowMapper<Calendar> calendarRowMapperV2() {
         return new RowMapper<Calendar>() {
             @Override
             public Calendar mapRow(ResultSet rs, int rowNum) throws SQLException {

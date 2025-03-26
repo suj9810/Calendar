@@ -3,7 +3,8 @@ package com.example.calendar.service;
 import com.example.calendar.dto.CalendarRequestDto;
 import com.example.calendar.dto.CalendarResponseDto;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CalendarService {
@@ -12,7 +13,7 @@ public interface CalendarService {
     CalendarResponseDto saveSchedule(CalendarRequestDto dto);
 
     // 2️⃣ 일정 목록 조회
-    List<CalendarResponseDto> findAllSchedules();
+    List<CalendarResponseDto> findAllSchedules(String writer, LocalDate updatedAt);
 
     // 3️⃣ 일정 단건 조회
     CalendarResponseDto findScheduleById(Long id);

@@ -3,10 +3,13 @@ package com.example.calendar.controller;
 import com.example.calendar.dto.CalendarRequestDto;
 import com.example.calendar.dto.CalendarResponseDto;
 import com.example.calendar.service.CalendarService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -28,9 +31,11 @@ public class CalendarController {
 
     // 2️⃣ 일정 목록 조회
     @GetMapping("/schedule")
-    public ResponseEntity<List<CalendarResponseDto>> findAllSchedules() {
-
-        return new ResponseEntity<>(calendarService.findAllSchedules(), HttpStatus.OK);
+    public ResponseEntity<List<CalendarResponseDto>> findAllSchedules(
+            @RequestParam(required = false) String writer,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate updatedAt
+    ) {
+        return new ResponseEntity<>(calendarService.findAllSchedules(writer, updatedAt), HttpStatus.OK);
     }
 
     // 3️⃣ 일정 단건 조회
