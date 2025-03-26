@@ -50,5 +50,5 @@
 
 ## 추가 정보 ℹ️
 
-- 자세한 SQL 스크립트는 [schedule.sql](schedule.sql) 참조
+- QL 스크립트는 [schedule.sql](schedule.sql)
 - ERD 다이어그램: ![ERD](img/img.png)
