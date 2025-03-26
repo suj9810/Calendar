@@ -1,4 +1,4 @@
--- 📖 테이블 생성
+-- 테이블 생성
 CREATE TABLE calendar(
                          id             BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                          title          VARCHAR(100)      NOT NULL,
@@ -15,7 +15,26 @@ VALUES (id, title, todoist, writer, password);
 
 -- 일정 목록 조회
 SELECT id, title, todoist, createdAt, updatedAt, writer
-FROM calendar;
+FROM calendar
+ORDER BY updatedAt DESC;
+
+-- 일정 목록 작성자 조회
+SELECT id, title, todoist, createdAt, updatedAt, writer
+FROM calendar
+WHERE writer = ?
+ORDER BY updatedAt DESC;
+
+-- 일정 목록 작성 날짜 조회
+SELECT id, title, todoist, createdAt, updatedAt, writer
+FROM calendar
+WHERE updatedAt = ?
+ORDER BY updatedAt DESC;
+
+-- 일정 목록 작성자 또는 작성 날짜 조회
+SELECT id, title, todoist, createdAt, updatedAt, writer
+FROM calendar
+WHERE writer = ? OR updatedAt = ?
+ORDER BY updatedAt DESC;
 
 -- 일정 조회
 SELECT *
